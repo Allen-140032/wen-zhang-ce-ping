@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI爆款潜力测评</title>
+  <style>
+    :root {
+      --bg: #f6f8f7;
+      --panel: #ffffff;
+      --ink: #17201d;
+      --muted: #62716c;
+      --line: #dfe7e3;
+      --teal: #0f9b8e;
+      --teal-dark: #08766c;
+      --amber: #f0a524;
+      --coral: #ef6f5e;
+      --green: #2f9d63;
+      --shadow: 0 18px 46px rgba(25, 43, 38, 0.12);
+      --radius: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(15, 155, 142, 0.12), transparent 34%),
+        radial-gradient(circle at 85% 0%, rgba(240, 165, 36, 0.14), transparent 30%),
+        var(--bg);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 8px 0 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--teal), var(--amber));
+      box-shadow: 0 9px 22px rgba(15, 155, 142, 0.28);
+    }
+
+    .badge {
+      padding: 6px 10px;
+      border: 1px solid rgba(15, 155, 142, 0.26);
+      border-radius: 999px;
+      color: var(--teal-dark);
+      background: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.03fr) minmax(320px, 0.97fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .intro,
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(223, 231, 227, 0.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .intro {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 420px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro::after {
+      content: "";
+      position: absolute;
+      inset: auto -90px -120px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(15, 155, 142, 0.08);
+      pointer-events: none;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      max-width: 680px;
+      font-size: clamp(34px, 6.2vw, 62px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.72;
+    }
+
+    .promise {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .promise-item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdfc;
+    }
+
+    .promise-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .promise-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: #26322f;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.16s, box-shadow 0.16s;
+    }
+
+    textarea {
+      min-height: 210px;
+      resize: vertical;
+      padding: 14px;
+      line-height: 1.7;
+    }
+
+    input,
+    select {
+      height: 44px;
+      padding: 0 12px;
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 4px rgba(15, 155, 142, 0.12);
+    }
+
+    .settings {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      min-height: 46px;
+      border: 0;
+      border-radius: var(--radius);
+      padding: 0 16px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform 0.16s, box-shadow 0.16s, background 0.16s;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      flex: 1;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      box-shadow: 0 12px 24px rgba(15, 155, 142, 0.24);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 16px 30px rgba(15, 155, 142, 0.3);
+    }
+
+    .btn-ghost {
+      color: var(--teal-dark);
+      background: rgba(15, 155, 142, 0.1);
+    }
+
+    .privacy {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .result.is-visible {
+      display: block;
+    }
+
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 20px;
+      border: 1px solid rgba(15, 155, 142, 0.22);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(15, 155, 142, 0.09), rgba(240, 165, 36, 0.09));
+    }
+
+    .total-ring {
+      width: 176px;
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--teal) var(--score-angle, 0deg), #e7eeeb 0deg);
+      position: relative;
+    }
+
+    .total-ring::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .total-value {
+      position: relative;
+      text-align: center;
+    }
+
+    .total-value strong {
+      display: block;
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .total-value span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grade {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .diagnosis {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .metric-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+      font-weight: 800;
+    }
+
+    .metric-score {
+      color: var(--teal-dark);
+      white-space: nowrap;
+    }
+
+    .bar {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #edf2f0;
+      margin-bottom: 10px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--bar-width, 0%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+    }
+
+    .metric p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .advice {
+      margin-top: 14px;
+      padding: 18px;
+      border-radius: var(--radius);
+      background: #17201d;
+      color: #f8fbfa;
+    }
+
+    .advice h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .advice ol {
+      margin: 0;
+      padding-left: 22px;
+      line-height: 1.75;
+    }
+
+    .share-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px dashed rgba(15, 155, 142, 0.45);
+      border-radius: var(--radius);
+      background: rgba(15, 155, 142, 0.07);
+    }
+
+    .share-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .loader {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: var(--radius);
+      color: var(--teal-dark);
+      background: rgba(15, 155, 142, 0.09);
+    }
+
+    .loader.is-visible {
+      display: flex;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(15, 155, 142, 0.2);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(239, 111, 94, 0.32);
+      border-radius: var(--radius);
+      color: #9f3329;
+      background: rgba(239, 111, 94, 0.09);
+      line-height: 1.55;
+    }
+
+    .error.is-visible {
+      display: block;
+    }
+
+    .footer {
+      padding: 26px 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        padding: 14px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .intro {
+        min-height: auto;
+        padding: 24px;
+      }
+
+      .promise,
+      .settings,
+      .metrics,
+      .scoreboard {
+        grid-template-columns: 1fr;
+      }
+
+      .scoreboard {
+        padding: 16px;
+      }
+
+      .total-ring {
+        width: 148px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .card,
+      .intro {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="topbar" aria-label="页面信息">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">AI</div>
+        <span>AI漂流实录 · 小工具</span>
+      </div>
+      <div class="badge">单页 MVP · 不存储内容</div>
+    </nav>
+
+    <section class="hero">
+      <div class="intro">
+        <div>
+          <h1>AI爆款潜力测评</h1>
+          <p class="lead">粘贴公众号标题或正文，快速生成 6 维度评分、总分和改进建议。先体检，再动笔。</p>
+        </div>
+
+        <div class="promise" aria-label="功能特点">
+          <div class="promise-item">
+            <strong>6维评分</strong>
+            <span>标题、钩子、节奏、情绪、可读性、行动号召。</span>
+          </div>
+          <div class="promise-item">
+            <strong>可改建议</strong>
+            <span>不是只打分，而是给下一版可执行动作。</span>
+          </div>
+          <div class="promise-item">
+            <strong>手机适配</strong>
+            <span>单文件页面，适合微信内测与快速传播。</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="card" aria-label="测评输入区">
+        <div class="field">
+          <label for="articleInput">
+            粘贴文章或标题
+            <span class="hint" id="wordCount">0 字</span>
+          </label>
+          <textarea id="articleInput" placeholder="例如：粘贴公众号标题、开头、全文，或一篇准备发布的草稿。"></textarea>
+        </div>
+
+        <div class="settings">
+          <div class="field">
+            <label for="provider">分析方式</label>
+            <select id="provider">
+              <option value="demo">本地演示评分</option>
+              <option value="deepseek">DeepSeek API</option>
+              <option value="api2d">API2D / GPT-4o</option>
+              <option value="custom">自定义 OpenAI-Compatible</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="model">模型</label>
+            <input id="model" value="deepseek-chat" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field" id="endpointField">
+          <label for="endpoint">接口地址</label>
+          <input id="endpoint" value="https://api.deepseek.com/v1/chat/completions" autocomplete="off">
+        </div>
+
+        <div class="field" id="keyField">
+          <label for="apiKey">
+            API Key
+            <span class="hint">只在本次浏览器请求中使用</span>
+          </label>
+          <input id="apiKey" type="password" placeholder="本地演示评分可留空" autocomplete="off">
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="analyzeBtn" type="button">开始测评</button>
+          <button class="btn btn-ghost" id="sampleBtn" type="button">填入示例</button>
+        </div>
+
+        <p class="privacy">公开部署时建议走 Friday 中转接口，避免 API Key 暴露在前端。当前版本适合本地测试、演示和 MVP 验证。</p>
+        <div class="loader" id="loader"><span class="spinner" aria-hidden="true"></span><span>正在拆解标题、钩子和传播价值...</span></div>
+        <div class="error" id="errorBox"></div>
+      </section>
+    </section>
+
+    <section class="result" id="result" aria-live="polite">
+      <div class="scoreboard">
+        <div class="total-ring" id="scoreRing">
+          <div class="total-value">
+            <strong id="totalScore">0</strong>
+            <span>/ 60</span>
+          </div>
+        </div>
+        <div>
+          <p class="grade" id="gradeText">等待测评</p>
+          <p class="diagnosis" id="diagnosisText">输入内容后，系统会给出爆款潜力判断和下一步优化方向。</p>
+        </div>
+      </div>
+
+      <div class="metrics" id="metrics"></div>
+
+      <div class="advice">
+        <h2>综合建议</h2>
+        <ol id="overallAdvice"></ol>
+      </div>
+
+      <div class="share-box">
+        <p id="shareText">生成测评结果后，可复制摘要发给编辑或团队复盘。</p>
+        <button class="btn btn-ghost" id="copyBtn" type="button">复制结果</button>
+      </div>
+    </section>
+
+    <footer class="footer">AI漂流实录 · 自动化生产，不自动化判断</footer>
+  </main>
+
+  <script>
+    const dimensions = [
+      ["title_score", "title_advice", "标题吸引力"],
+      ["hook_score", "hook_advice", "开篇钩子"],
+      ["rhythm_score", "rhythm_advice", "段落节奏"],
+      ["emotion_score", "emotion_advice", "情绪曲线"],
+      ["readability_score", "readability_advice", "可读性"],
+      ["cta_score", "cta_advice", "行动号召"]
+    ];
+
+    const providerConfig = {
+      demo: {
+        endpoint: "",
+        model: "local-demo"
+      },
+      deepseek: {
+        endpoint: "https://api.deepseek.com/v1/chat/completions",
+        model: "deepseek-chat"
+      },
+      api2d: {
+        endpoint: "https://openai.api2d.net/v1/chat/completions",
+        model: "gpt-4o"
+      },
+      custom: {
+        endpoint: "",
+        model: ""
+      }
+    };
+
+    const articleInput = document.getElementById("articleInput");
+    const wordCount = document.getElementById("wordCount");
+    const provider = document.getElementById("provider");
+    const model = document.getElementById("model");
+    const endpoint = document.getElementById("endpoint");
+    const apiKey = document.getElementById("apiKey");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const loader = document.getElementById("loader");
+    const errorBox = document.getElementById("errorBox");
+    const result = document.getElementById("result");
+    const scoreRing = document.getElementById("scoreRing");
+    const totalScore = document.getElementById("totalScore");
+    const gradeText = document.getElementById("gradeText");
+    const diagnosisText = document.getElementById("diagnosisText");
+    const metrics = document.getElementById("metrics");
+    const overallAdvice = document.getElementById("overallAdvice");
+    const shareText = document.getElementById("shareText");
+    const copyBtn = document.getElementById("copyBtn");
+
+    let lastReport = null;
+
+    articleInput.addEventListener("input", updateCount);
+    provider.addEventListener("change", () => {
+      const conf = providerConfig[provider.value];
+      endpoint.value = conf.endpoint;
+      model.value = conf.model;
+      apiKey.placeholder = provider.value === "demo" ? "本地演示评分可留空" : "请输入你的 API Key";
+    });
+
+    sampleBtn.addEventListener("click", () => {
+      articleInput.value = "别再问哪个 AI 最强了，我让三个 AI 分工后，公众号草稿真的进箱了\n\n过去一段时间，我一直在做一件听起来有点夸张的事：把一个人的公众号，拆成一条 AI 协作生产线。不是让 AI 帮我写篇文章，而是把选题、资料、结构、写作、配图、排版、上传草稿这些步骤拆给不同的 AI 去做。真正拉开差距的，不是会不会用某个工具，而是能不能把多个 AI 组织成一条可交付的生产线。";
+      updateCount();
+      hideError();
+    });
+
+    analyzeBtn.addEventListener("click", async () => {
+      const text = articleInput.value.trim();
+      if (!text) {
+        showError("先粘贴标题、开头或正文，再开始测评。");
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+
+      try {
+        let report;
+        if (provider.value === "demo") {
+          await delay(900);
+          report = heuristicEvaluate(text);
+        } else {
+          report = await callLLM(text);
+        }
+        renderReport(normalizeReport(report, text));
+      } catch (err) {
+        showError(`${err.message}。已自动切换为本地演示评分，供你继续验证页面流程。`);
+        renderReport(normalizeReport(heuristicEvaluate(text), text));
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!lastReport) return;
+      const text = buildShareSummary(lastReport);
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "已复制";
+        setTimeout(() => copyBtn.textContent = "复制结果", 1200);
+      } catch {
+        showError("复制失败。可以手动选中结果摘要复制。");
+      }
+    });
+
+    function updateCount() {
+      const count = articleInput.value.replace(/\s/g, "").length;
+      wordCount.textContent = `${count} 字`;
+    }
+
+    function setLoading(isLoading) {
+      analyzeBtn.disabled = isLoading;
+      analyzeBtn.textContent = isLoading ? "测评中..." : "开始测评";
+      loader.classList.toggle("is-visible", isLoading);
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add("is-visible");
+    }
+
+    function hideError() {
+      errorBox.textContent = "";
+      errorBox.classList.remove("is-visible");
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function callLLM(text) {
+      if (!endpoint.value.trim()) {
+        throw new Error("接口地址不能为空");
+      }
+      if (!apiKey.value.trim()) {
+        throw new Error("使用 API 模式需要填写 API Key");
+      }
+      const payload = {
+        model: model.value.trim() || "deepseek-chat",
+        temperature: 0.2,
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: [
+              "你是一个专业的公众号文章质量分析专家。",
+              "请从标题吸引力、开篇钩子、段落节奏、情绪曲线、可读性、行动号召6个维度分析用户提交的文章。",
+              "每个维度给出1-10分和具体改进建议。",
+              "只能返回JSON，不要返回Markdown，不要返回解释。",
+              "JSON字段必须包含：title_score,title_advice,hook_score,hook_advice,rhythm_score,rhythm_advice,emotion_score,emotion_advice,readability_score,readability_advice,cta_score,cta_advice,overall_advice。overall_advice为4条中文建议数组。"
+            ].join("")
+          },
+          {
+            role: "user",
+            content: text.slice(0, 12000)
+          }
+        ]
+      };
+
+      const response = await fetch(endpoint.value.trim(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey.value.trim()}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(`API 请求失败：${response.status} ${detail.slice(0, 160)}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content;
+      if (!content) {
+        throw new Error("API 返回内容为空");
+      }
+
+      try {
+        return JSON.parse(content);
+      } catch {
+        const matched = content.match(/\{[\s\S]*\}/);
+        if (!matched) throw new Error("API 未返回可解析 JSON");
+        return JSON.parse(matched[0]);
+      }
+    }
+
+    function heuristicEvaluate(text) {
+      const compact = text.replace(/\s+/g, "");
+      const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
+      const title = lines[0] || text.slice(0, 36);
+      const firstPara = lines.slice(0, 3).join("");
+      const paragraphs = lines.length;
+      const sentenceCount = Math.max(1, (text.match(/[。！？!?]/g) || []).length);
+      const avgSentenceLength = compact.length / sentenceCount;
+      const hasNumber = /\d|一|二|三|四|五|六|七|八|九|十|百|千/.test(title);
+      const hasQuestion = /[?？]/.test(title);
+      const hasContrast = /(不是|而是|别再|真正|竟然|没想到|只要|普通人|差距|爆款|最强)/.test(title);
+      const hasPain = /(焦虑|痛点|卡住|失败|问题|难|累|断|增长|粉丝|转发)/.test(text);
+      const hasCTA = /(关注|转发|评论|点赞|收藏|留言|分享|下次|欢迎)/.test(text.slice(-360));
+      const emotionWords = (text.match(/(震惊|焦虑|兴奋|终于|失败|成功|意外|反差|痛苦|爽|救|爆|赢|怕|难)/g) || []).length;
+      const headings = (text.match(/^#{1,3}\s|\n##|\n一、|\n二、|\n三、|\n四、|\n五、|\n六、/g) || []).length;
+
+      const titleScore = clamp(5 + (hasNumber ? 1 : 0) + (hasQuestion ? 1 : 0) + (hasContrast ? 2 : 0) + (title.length <= 36 ? 1 : 0));
+      const hookScore = clamp(4 + (firstPara.length < 160 ? 1 : 0) + (hasPain ? 2 : 0) + (/(我|今天|昨天|这次|结果|跑通)/.test(firstPara) ? 2 : 0));
+      const rhythmScore = clamp(5 + (paragraphs >= 8 ? 2 : 0) + (headings >= 2 ? 2 : 0) + (avgSentenceLength < 34 ? 1 : -1));
+      const emotionScore = clamp(4 + Math.min(4, Math.floor(emotionWords / 2)) + (hasContrast ? 1 : 0));
+      const readabilityScore = clamp(8 - (avgSentenceLength > 42 ? 2 : 0) - (compact.length > 5000 && headings < 3 ? 1 : 0) + (paragraphs > sentenceCount * 0.45 ? 1 : 0));
+      const ctaScore = clamp(4 + (hasCTA ? 4 : 0) + (/下一篇|下次|继续/.test(text.slice(-500)) ? 1 : 0));
+
+      return {
+        title_score: titleScore,
+        title_advice: hasContrast ? "标题已经有反差或强观点，可继续压缩到更利于转述的一句话。" : "标题建议加入反常识、数字或明确痛点，让读者第一眼知道为什么要点开。",
+        hook_score: hookScore,
+        hook_advice: hasPain ? "开篇能碰到读者问题，建议前3行更快给出具体结果或冲突。" : "首段建议直接抛出读者痛点或真实结果，减少背景铺垫。",
+        rhythm_score: rhythmScore,
+        rhythm_advice: headings >= 2 ? "结构层级清楚，移动端阅读压力较小。" : "建议增加小标题和短段落，让读者滑动时能抓住节奏。",
+        emotion_score: emotionScore,
+        emotion_advice: emotionWords >= 4 ? "情绪词和转折已有基础，建议在2/3处增加一个明确高潮点。" : "文章需要一个更强的情绪转折，例如失败、反差、意外结果或胜利瞬间。",
+        readability_score: readabilityScore,
+        readability_advice: avgSentenceLength < 34 ? "句子长度整体友好，适合手机阅读。" : "部分句子偏长，建议拆短并减少连续抽象概念。",
+        cta_score: ctaScore,
+        cta_advice: hasCTA ? "结尾已有行动引导，可再强化关注理由。" : "结尾建议加入关注、收藏、评论或转发理由。",
+        overall_advice: [
+          "把标题压成一句可转述的强观点，优先使用反差结构。",
+          "开头3行给出具体结果、冲突或读者痛点，少铺背景。",
+          "在文章中后段设计一个情绪高潮，让读者有分享冲动。",
+          "结尾加入明确行动号召，并说明读者为什么值得继续关注。"
+        ]
+      };
+    }
+
+    function clamp(value) {
+      return Math.max(1, Math.min(10, Math.round(value)));
+    }
+
+    function normalizeReport(raw, text) {
+      const report = {};
+      for (const [scoreKey, adviceKey] of dimensions) {
+        report[scoreKey] = clamp(Number(raw[scoreKey] || 6));
+        report[adviceKey] = String(raw[adviceKey] || "建议继续强化这一项，让内容更适合传播。");
+      }
+      report.overall_advice = Array.isArray(raw.overall_advice) && raw.overall_advice.length
+        ? raw.overall_advice.slice(0, 4).map(String)
+        : heuristicEvaluate(text).overall_advice;
+      return report;
+    }
+
+    function renderReport(report) {
+      lastReport = report;
+      const total = dimensions.reduce((sum, [scoreKey]) => sum + report[scoreKey], 0);
+      const angle = Math.round(total / 60 * 360);
+      const grade = total >= 52 ? "爆款潜力强" : total >= 44 ? "良好，可冲一版" : total >= 34 ? "有基础，需要重剪" : "传播阻力较大";
+      const diagnosis = total >= 52
+        ? "内容已经具备较强点击和转发基础，下一步重点是压标题和优化结尾转发理由。"
+        : total >= 44
+          ? "整体方向不错，但还需要在开头钩子、情绪高潮或行动号召上补一刀。"
+          : total >= 34
+            ? "文章有可用素材，但传播钩子还不够清楚，建议先重构标题和开篇。"
+            : "建议重新确认读者痛点和核心观点，再进入正文扩写。";
+
+      scoreRing.style.setProperty("--score-angle", `${angle}deg`);
+      totalScore.textContent = total;
+      gradeText.textContent = grade;
+      diagnosisText.textContent = diagnosis;
+      metrics.innerHTML = "";
+      overallAdvice.innerHTML = "";
+
+      for (const [scoreKey, adviceKey, label] of dimensions) {
+        const item = document.createElement("article");
+        item.className = "metric";
+        item.innerHTML = `
+          <div class="metric-head">
+            <span>${label}</span>
+            <span class="metric-score">${report[scoreKey]}/10</span>
+          </div>
+          <div class="bar" aria-hidden="true"><span style="--bar-width:${report[scoreKey] * 10}%"></span></div>
+          <p>${escapeHTML(report[adviceKey])}</p>
+        `;
+        metrics.appendChild(item);
+      }
+
+      report.overall_advice.forEach(advice => {
+        const li = document.createElement("li");
+        li.textContent = advice;
+        overallAdvice.appendChild(li);
+      });
+
+      shareText.textContent = `总分 ${total}/60：${grade}。${diagnosis}`;
+      result.classList.add("is-visible");
+      result.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function buildShareSummary(report) {
+      const total = dimensions.reduce((sum, [scoreKey]) => sum + report[scoreKey], 0);
+      const lines = [`AI爆款潜力测评：${total}/60`];
+      dimensions.forEach(([scoreKey,, label]) => lines.push(`${label}：${report[scoreKey]}/10`));
+      lines.push("综合建议：");
+      report.overall_advice.forEach((advice, index) => lines.push(`${index + 1}. ${advice}`));
+      return lines.join("\n");
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
