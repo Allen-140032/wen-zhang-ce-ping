@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "AI爆款潜力测评器",
+  "description": "粘贴公众号标题和正文，快速获得 6 维度爆款潜力评分。",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "AI爆款潜力测评器",
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
