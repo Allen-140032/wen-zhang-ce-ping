@@ -1,0 +1,11 @@
+# Build artifacts
+dist/
+*.zip
+
+# Local secrets and generated license data
+license/private-key.pem
+license/licenses.json
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
